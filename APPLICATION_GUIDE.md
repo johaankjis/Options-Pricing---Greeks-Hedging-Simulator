@@ -1,147 +1,254 @@
-# Options Pricing & Hedging Simulator - Application Guide
+<div align="center">
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Architecture](#architecture)
-3. [Core Components](#core-components)
-4. [Pricing Models](#pricing-models)
-5. [Greeks Computation](#greeks-computation)
-6. [Hedging Strategies](#hedging-strategies)
-7. [Interactive Dashboard](#interactive-dashboard)
-8. [Performance Optimization](#performance-optimization)
-9. [Getting Started](#getting-started)
-10. [API Reference](#api-reference)
-11. [Use Cases](#use-cases)
+# 📚 Options Pricing & Hedging Simulator
+## *Comprehensive Application Guide*
+
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-brightgreen.svg)](.)
+[![API](https://img.shields.io/badge/API-reference-orange.svg)](#api-reference)
+
+*Your complete guide to professional-grade options pricing and hedging*
 
 ---
 
-## Overview
+</div>
 
-The Options Pricing & Hedging Simulator is a professional-grade application designed for quantitative researchers, traders, and finance students. It provides accurate options pricing, real-time Greeks computation, and sophisticated hedging strategy simulation capabilities.
+## 📑 Table of Contents
 
-### Key Capabilities
-- **Accurate Pricing**: ≤ 0.5% error vs benchmark data
-- **Real-Time Analysis**: < 1 second dashboard update latency
-- **High Performance**: 10,000 Monte Carlo paths computed in < 2 seconds
-- **Comprehensive Greeks**: Delta, Gamma, Vega, Theta, and Rho
-- **Advanced Hedging**: Delta-neutral and Gamma-neutral strategies
-- **Monte Carlo Simulation**: Stress testing across 1,000+ market scenarios
+<table>
+<tr>
+<td width="50%">
 
-### Target Users
-- **Quantitative Researchers**: Testing pricing models and hedging theories
-- **Traders**: Analyzing option strategies and risk exposure
-- **Students**: Learning derivatives pricing and risk management
-- **Portfolio Managers**: Hedging portfolio risk
+### 🎯 Fundamentals
+1. [📖 Overview](#overview)
+2. [🏗️ Architecture](#architecture)
+3. [🧩 Core Components](#core-components)
+4. [📐 Pricing Models](#pricing-models)
+5. [📊 Greeks Computation](#greeks-computation)
+
+</td>
+<td width="50%">
+
+### 🚀 Advanced Topics
+6. [🛡️ Hedging Strategies](#hedging-strategies)
+7. [🎨 Interactive Dashboard](#interactive-dashboard)
+8. [⚡ Performance Optimization](#performance-optimization)
+9. [💻 Getting Started](#getting-started)
+10. [📚 API Reference](#api-reference)
+11. [🎯 Use Cases](#use-cases)
+
+</td>
+</tr>
+</table>
 
 ---
 
-## Architecture
+## 📖 Overview
 
-The application is built on a modular architecture with clear separation of concerns:
+> *A professional-grade application designed for quantitative researchers, traders, and finance students.*
+
+The **Options Pricing & Hedging Simulator** provides accurate options pricing, real-time Greeks computation, and sophisticated hedging strategy simulation capabilities.
+
+### 🎯 Key Capabilities
+
+<div align="center">
+
+| Feature | Specification | Status |
+|---------|--------------|--------|
+| 🎯 **Accurate Pricing** | ≤ 0.5% error vs benchmarks | ✅ |
+| ⚡ **Real-Time Analysis** | < 1s dashboard updates | ✅ |
+| 🚀 **High Performance** | 10K Monte Carlo paths in < 2s | ✅ |
+| 📊 **Comprehensive Greeks** | Δ, Γ, ν, Θ, ρ | ✅ |
+| 🛡️ **Advanced Hedging** | Delta & Gamma-neutral | ✅ |
+| 🎲 **Monte Carlo** | 1,000+ market scenarios | ✅ |
+
+</div>
+
+### 👥 Target Users
+
+<table>
+<tr>
+<td width="50%">
+
+#### 🔬 Quantitative Researchers
+- Testing pricing models
+- Validating hedging theories
+- Academic research
+
+</td>
+<td width="50%">
+
+#### 📈 Traders
+- Analyzing option strategies
+- Assessing risk exposure
+- Real-time decision making
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### 🎓 Students
+- Learning derivatives pricing
+- Understanding risk management
+- Hands-on practice
+
+</td>
+<td width="50%">
+
+#### 💼 Portfolio Managers
+- Hedging portfolio risk
+- Stress testing positions
+- Risk analytics
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Architecture
+
+> *Built on a modular architecture with clear separation of concerns*
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Dashboard Layer (Plotly Dash)            │
-│          Interactive UI with Real-time Visualizations        │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-┌─────────────────────┴───────────────────────────────────────┐
-│                   Application Logic Layer                   │
-├─────────────────────┬───────────────────┬───────────────────┤
-│  Pricing Engine     │  Hedging Simulator│   Validation      │
-│  - Black-Scholes    │  - Delta Hedge    │   - Accuracy      │
-│  - Binomial Tree    │  - Gamma Hedge    │   - Benchmarks    │
-│  - Greeks           │  - Monte Carlo    │                   │
-└─────────────────────┴───────────────────┴───────────────────┘
-                      │
-┌─────────────────────┴───────────────────────────────────────┐
-│              Optimization Layer (Numba JIT)                 │
-│        Compiled Functions for Performance-Critical Code      │
-└─────────────────────────────────────────────────────────────┘
+╔═══════════════════════════════════════════════════════════╗
+║            🎨 Dashboard Layer (Plotly Dash)              ║
+║        Interactive UI with Real-time Visualizations       ║
+╚═══════════════════════════╦═══════════════════════════════╝
+                            ║
+╔═══════════════════════════╩═══════════════════════════════╗
+║              📊 Application Logic Layer                   ║
+╠═══════════════╦═══════════════════╦═══════════════════════╣
+║ 💰 Pricing    ║  🛡️ Hedging       ║  ✅ Validation        ║
+║ • Black-Sch.. ║  • Delta Hedge   ║  • Accuracy           ║
+║ • Binomial    ║  • Gamma Hedge   ║  • Benchmarks         ║
+║ • Greeks      ║  • Monte Carlo   ║                       ║
+╚═══════════════╩═══════════════════╩═══════════════════════╝
+                            ║
+╔═══════════════════════════╩═══════════════════════════════╗
+║           ⚡ Optimization Layer (Numba JIT)              ║
+║      Compiled Functions for Performance-Critical Code     ║
+╚═══════════════════════════════════════════════════════════╝
 ```
 
-### File Structure
+### 📂 File Structure
+
 ```
 options-simulator/
-├── pricing.py              # Core pricing engine (Black-Scholes & Binomial)
-├── pricing_optimized.py    # JIT-compiled optimized pricing engine
-├── hedging.py              # Hedging strategies and portfolio management
-├── validation.py           # Pricing accuracy validation against benchmarks
-├── dashboard.py            # Interactive Plotly Dash web application
-├── scripts/
-│   ├── run_dashboard.py           # Launch the dashboard server
-│   ├── test_pricing.py            # Validate pricing accuracy
-│   ├── test_hedging.py            # Test hedging effectiveness
-│   └── benchmark_performance.py   # Performance benchmarking
-├── Dockerfile              # Container configuration
-├── requirements.txt        # Python dependencies
-└── README.md               # Quick start guide
+│
+├── 💰 Pricing Engines
+│   ├── pricing.py                  # Core pricing engine (Black-Scholes & Binomial)
+│   └── pricing_optimized.py        # JIT-compiled optimized engine
+│
+├── 🛡️ Risk Management
+│   ├── hedging.py                  # Hedging strategies & portfolio management
+│   └── validation.py               # Accuracy validation against benchmarks
+│
+├── 🎨 User Interface
+│   └── dashboard.py                # Interactive Plotly Dash web application
+│
+├── 🧪 Testing & Scripts
+│   └── scripts/
+│       ├── run_dashboard.py        # 🚀 Launch dashboard server
+│       ├── test_pricing.py         # ✅ Validate pricing accuracy
+│       ├── test_hedging.py         # 🛡️ Test hedging effectiveness
+│       └── benchmark_performance.py # 📊 Performance benchmarking
+│
+├── 🐳 Deployment
+│   └── Dockerfile                  # Container configuration
+│
+└── 📚 Documentation
+    ├── README.md                   # Quick start guide
+    ├── APPLICATION_GUIDE.md        # This comprehensive guide
+    └── requirements.txt            # Python dependencies
 ```
 
 ---
 
-## Core Components
+## 🧩 Core Components
 
-### 1. Pricing Engine (`pricing.py`)
+### 1️⃣ Pricing Engine (`pricing.py`)
 
-The baseline pricing engine implements two fundamental option pricing models:
+> *The baseline pricing engine implementing two fundamental option pricing models*
 
-#### Black-Scholes Model
-- **Purpose**: Analytical pricing for European-style options
-- **Advantages**: Exact solution, very fast computation
-- **Limitations**: European options only (no early exercise)
+<table>
+<tr>
+<td width="50%">
 
-#### Binomial Tree Model
-- **Purpose**: Discrete-time pricing for American-style options
-- **Advantages**: Supports early exercise, flexible
-- **Parameters**: Default 100 time steps for accuracy
+#### 📐 Black-Scholes Model
+- **Purpose**: European options
+- **✅ Advantages**: Exact solution, fast
+- **⚠️ Limitations**: No early exercise
 
-**Example Usage:**
+</td>
+<td width="50%">
+
+#### 🌳 Binomial Tree Model
+- **Purpose**: American options
+- **✅ Advantages**: Early exercise support
+- **⚙️ Parameters**: 100 time steps (default)
+
+</td>
+</tr>
+</table>
+
+#### 💻 Example Usage
+
 ```python
 from pricing import OptionParams, OptionsPricingEngine
 
-# Create pricing engine
+# 🔧 Create pricing engine
 engine = OptionsPricingEngine()
 
-# Define option parameters
+# 📝 Define option parameters
 params = OptionParams(
-    spot=100,           # Current stock price
-    strike=100,         # Strike price
-    volatility=0.25,    # 25% annual volatility
-    rate=0.05,          # 5% risk-free rate
-    maturity=1.0,       # 1 year to expiration
-    option_type='call', # 'call' or 'put'
-    style='european'    # 'european' or 'american'
+    spot=100,           # 💵 Current stock price
+    strike=100,         # 🎯 Strike price
+    volatility=0.25,    # 📊 25% annual volatility
+    rate=0.05,          # 💰 5% risk-free rate
+    maturity=1.0,       # ⏰ 1 year to expiration
+    option_type='call', # 📈 'call' or 'put'
+    style='european'    # 🌍 'european' or 'american'
 )
 
-# Calculate price
+# 💵 Calculate price
 price = engine.price(params)
-print(f"Option Price: ${price:.2f}")
+print(f"💰 Option Price: ${price:.2f}")
 
-# Calculate Greeks
+# 📊 Calculate Greeks
 greeks = engine.greeks(params)
-print(f"Delta: {greeks['delta']:.4f}")
-print(f"Gamma: {greeks['gamma']:.4f}")
-print(f"Vega:  {greeks['vega']:.4f}")
-print(f"Theta: {greeks['theta']:.4f}")
-print(f"Rho:   {greeks['rho']:.4f}")
+print(f"📊 Delta: {greeks['delta']:.4f}")
+print(f"📊 Gamma: {greeks['gamma']:.4f}")
+print(f"📊 Vega:  {greeks['vega']:.4f}")
+print(f"📊 Theta: {greeks['theta']:.4f}")
+print(f"📊 Rho:   {greeks['rho']:.4f}")
 ```
 
-### 2. Optimized Pricing Engine (`pricing_optimized.py`)
+### 2️⃣ Optimized Pricing Engine (`pricing_optimized.py`)
 
-The optimized engine uses Numba JIT compilation for high-performance computation:
+> *High-performance engine using Numba JIT compilation* ⚡
 
-**Key Features:**
-- 40-60% faster than baseline for single pricing
-- 80-90% faster for vectorized operations
-- Supports parallel Monte Carlo simulation
-- < 2 seconds for 10,000 price paths
+#### 🚀 Key Features
 
-**Example - Vectorized Pricing:**
+<div align="center">
+
+| Feature | Performance | Improvement |
+|---------|-------------|-------------|
+| Single Pricing | Fast | **40-60%** faster |
+| Vectorized Operations | Ultra Fast | **80-90%** faster |
+| Monte Carlo | Lightning | **10K paths < 2s** |
+| Parallel Processing | Multi-core | Near-linear scaling |
+
+</div>
+
+#### 💻 Example - Vectorized Pricing
+
 ```python
 from pricing_optimized import OptimizedPricingEngine, OptionParams
 import numpy as np
 
+# 🔧 Initialize optimized engine
 engine = OptimizedPricingEngine()
 
 params = OptionParams(
@@ -149,40 +256,46 @@ params = OptionParams(
     rate=0.05, maturity=1.0, option_type='call'
 )
 
-# Price options for multiple spot prices
+# 🔢 Price options for multiple spot prices
 spot_array = np.linspace(80, 120, 1000)
 prices = engine.price_multiple(spot_array, params)
-# Computes 1,000 prices efficiently
+
+# ⚡ Computes 1,000 prices efficiently!
+print(f"✅ Computed {len(prices)} prices instantly!")
 ```
 
-**Example - Monte Carlo Simulation:**
+#### 💻 Example - Monte Carlo Simulation
+
 ```python
-# Simulate 10,000 price paths
+# 🎲 Simulate 10,000 price paths
 paths = engine.simulate_paths(
-    S0=100,         # Initial price
-    sigma=0.25,     # Volatility
-    r=0.05,         # Risk-free rate
-    T=1.0,          # Time horizon
-    n_paths=10000,  # Number of paths
-    n_steps=252     # Daily time steps
+    S0=100,         # 💵 Initial price
+    sigma=0.25,     # 📊 Volatility (25%)
+    r=0.05,         # 💰 Risk-free rate (5%)
+    T=1.0,          # ⏰ Time horizon (1 year)
+    n_paths=10000,  # 🔢 Number of paths
+    n_steps=252     # 📅 Daily time steps
 )
-# Returns: (10000, 253) array of price paths
-# Completes in < 2 seconds
+
+# 📊 Returns: (10000, 253) array of price paths
+# ⚡ Completes in < 2 seconds
+print(f"✅ Generated {paths.shape[0]:,} price paths!")
 ```
 
-### 3. Hedging Simulator (`hedging.py`)
+### 3️⃣ Hedging Simulator (`hedging.py`)
 
-Implements sophisticated hedging strategies to reduce portfolio risk:
+> *Sophisticated hedging strategies to reduce portfolio risk* 🛡️
 
-#### Portfolio Structure
+#### 📦 Portfolio Structure
+
 ```python
 from hedging import Portfolio, Position
 from pricing import OptionParams
 
-# Create a portfolio
+# 📊 Create a portfolio
 portfolio = Portfolio(positions=[])
 
-# Add option position
+# ➕ Add option position
 call_option = OptionParams(
     spot=100, strike=100, volatility=0.25,
     rate=0.05, maturity=0.5, option_type='call'
@@ -191,213 +304,401 @@ portfolio.add_position(
     Position(instrument_type='option', quantity=10, params=call_option)
 )
 
-# Add stock position
+# ➕ Add stock position
 portfolio.add_position(
-    Position(instrument_type='stock', quantity=-50)  # Short stock
+    Position(instrument_type='stock', quantity=-50)  # 📉 Short stock
 )
 ```
 
-#### Hedging Strategies
+#### 🛡️ Hedging Strategies
 
-**Delta Hedging:**
-- Creates a delta-neutral position
-- Uses underlying stock to offset delta exposure
-- Protects against small price movements
+<table>
+<tr>
+<td width="50%">
 
-**Gamma Hedging:**
-- Creates both delta and gamma-neutral positions
-- Uses additional options to offset gamma exposure
-- Protects against large price movements and delta changes
+##### ⚖️ Delta Hedging
+- ✅ Delta-neutral position
+- 📊 Uses underlying stock
+- 🎯 Protects against small moves
 
-**Example - Hedging Simulation:**
+</td>
+<td width="50%">
+
+##### 🎲 Gamma Hedging
+- ✅ Delta & Gamma neutral
+- 📊 Uses additional options
+- 🎯 Protects against large moves
+
+</td>
+</tr>
+</table>
+
+#### 💻 Example - Hedging Simulation
+
 ```python
 from hedging import HedgingSimulator
 
+# 🔧 Initialize simulator
 simulator = HedgingSimulator()
 
-# Test hedging effectiveness
+# 🧪 Test hedging effectiveness
 results = simulator.simulate_hedging_effectiveness(
     portfolio=portfolio,
-    hedge_strategy='delta',  # 'none', 'delta', or 'gamma'
-    n_scenarios=1000
+    hedge_strategy='delta',  # 🎯 'none', 'delta', or 'gamma'
+    n_scenarios=1000         # 🎲 1000 market scenarios
 )
 
-print(f"Portfolio Value Std Dev: ${results['portfolio_std']:.2f}")
-print(f"Variance Reduction: {results['variance_reduction']:.1f}%")
-print(f"Max Loss: ${results['max_loss']:.2f}")
+# 📊 Display results
+print(f"📊 Portfolio Std Dev: ${results['portfolio_std']:.2f}")
+print(f"📉 Variance Reduction: {results['variance_reduction']:.1f}%")
+print(f"⚠️ Max Loss: ${results['max_loss']:.2f}")
 ```
 
-### 4. Validation System (`validation.py`)
+### 4️⃣ Validation System (`validation.py`)
 
-Ensures pricing accuracy against academic benchmarks:
+> *Ensures pricing accuracy against academic benchmarks* ✅
 
-**Test Cases:**
-- At-the-money (ATM) options
-- In-the-money (ITM) options
-- Out-of-the-money (OTM) options
-- Various maturities and volatilities
+#### 🎯 Test Cases
 
-**Accuracy Target:** ≤ 0.5% error vs benchmark prices
+<div align="center">
+
+| Category | Description | Coverage |
+|----------|-------------|----------|
+| **ATM** | At-the-money options | ✅ |
+| **ITM** | In-the-money options | ✅ |
+| **OTM** | Out-of-the-money options | ✅ |
+| **Various** | Multiple maturities & volatilities | ✅ |
+
+**🎯 Accuracy Target:** ≤ 0.5% error vs benchmark prices
+
+</div>
+
+#### 🧪 Running Validation
 
 ```bash
-# Run validation
+# 🚀 Run validation suite
 python scripts/test_pricing.py
 ```
 
-**Sample Output:**
-```
-======================================================================
-OPTIONS PRICING ENGINE VALIDATION
-======================================================================
-Test Case                 Expected     Calculated   Error %   
-----------------------------------------------------------------------
-ATM European Call         $10.4506     $10.4502     0.0038%   ✓
-OTM European Put          $6.0400      $6.0403      0.0050%   ✓
-ITM European Call         $13.8308     $13.8305     0.0022%   ✓
-----------------------------------------------------------------------
+#### 📊 Sample Output
 
-Validation Statistics:
-  Tests Passed: 10/10 (100.0%)
-  Average Error: 0.0315%
-  Maximum Error: 0.1243%
+```
+╔══════════════════════════════════════════════════════════════════╗
+║          OPTIONS PRICING ENGINE VALIDATION                       ║
+╚══════════════════════════════════════════════════════════════════╝
+
+Test Case                 Expected     Calculated   Error %   Status
+──────────────────────────────────────────────────────────────────────
+ATM European Call         $10.4506     $10.4502     0.0038%   ✅
+OTM European Put          $6.0400      $6.0403      0.0050%   ✅
+ITM European Call         $13.8308     $13.8305     0.0022%   ✅
+──────────────────────────────────────────────────────────────────────
+
+📊 Validation Statistics:
+  ✅ Tests Passed: 10/10 (100.0%)
+  📊 Average Error: 0.0315%
+  📊 Maximum Error: 0.1243%
   
-✓ SUCCESS: All tests passed (error < 0.5% target)
+🎉 SUCCESS: All tests passed (error < 0.5% target)
 ```
 
 ---
 
-## Pricing Models
+## 📐 Pricing Models
 
-### Black-Scholes Model
+### 📊 Black-Scholes Model
 
-The Black-Scholes formula provides an analytical solution for European options:
+> *Analytical solution for European options - Fast & Exact*
 
-**Call Option:**
+#### 📐 Formulas
+
+<table>
+<tr>
+<td width="50%">
+
+**📈 Call Option:**
 ```
 C = S₀ · N(d₁) - K · e^(-rT) · N(d₂)
 ```
 
-**Put Option:**
+</td>
+<td width="50%">
+
+**📉 Put Option:**
 ```
 P = K · e^(-rT) · N(-d₂) - S₀ · N(-d₁)
 ```
 
-Where:
-- **d₁ = [ln(S₀/K) + (r + σ²/2)T] / (σ√T)**
-- **d₂ = d₁ - σ√T**
-- **S₀** = Current stock price
-- **K** = Strike price
-- **r** = Risk-free rate
-- **σ** = Volatility
-- **T** = Time to maturity
-- **N(x)** = Cumulative normal distribution
+</td>
+</tr>
+</table>
 
-**Assumptions:**
-- European exercise only
-- Constant volatility
-- No dividends
-- Efficient markets
-- Log-normal price distribution
+#### 🔢 Where:
 
-### Binomial Tree Model
+<div align="center">
 
-A discrete-time model that builds a tree of possible future prices:
+| Variable | Description | Formula |
+|----------|-------------|---------|
+| **d₁** | First parameter | `[ln(S₀/K) + (r + σ²/2)T] / (σ√T)` |
+| **d₂** | Second parameter | `d₁ - σ√T` |
+| **S₀** | Current stock price | Market value |
+| **K** | Strike price | Exercise price |
+| **r** | Risk-free rate | Annual rate |
+| **σ** | Volatility | Annual volatility |
+| **T** | Time to maturity | Years |
+| **N(x)** | Normal CDF | Cumulative distribution |
 
-**Algorithm:**
-1. Calculate up (u) and down (d) factors:
-   - u = e^(σ√Δt)
-   - d = 1/u
-   - p = (e^(rΔt) - d) / (u - d)  [risk-neutral probability]
+</div>
 
-2. Build price tree forward from spot to maturity
+#### ⚠️ Assumptions
 
-3. Calculate option values backward from maturity:
-   - Terminal values: max(S - K, 0) for calls
-   - Interior nodes: max(discounted expected value, early exercise value)
-
-**Advantages:**
-- Handles American options (early exercise)
-- Can incorporate dividends
-- More intuitive than Black-Scholes
-
-**Configuration:**
-- Default: 100 time steps
-- More steps = higher accuracy but slower computation
+- ✅ European exercise only
+- ✅ Constant volatility
+- ✅ No dividends
+- ✅ Efficient markets
+- ✅ Log-normal price distribution
 
 ---
 
-## Greeks Computation
+### 🌳 Binomial Tree Model
 
-Greeks measure option price sensitivity to various market factors:
+> *Discrete-time model for American options - Flexible & Intuitive*
 
-### Delta (Δ)
-**Definition:** Rate of change of option price with respect to underlying price
+#### 🔄 Algorithm
+
+```
+1️⃣ Calculate factors:
+   • u = e^(σ√Δt)                    [up factor]
+   • d = 1/u                         [down factor]
+   • p = (e^(rΔt) - d)/(u - d)       [risk-neutral probability]
+
+2️⃣ Build price tree:
+   • Forward from spot to maturity
+   • Tree structure: [spot] → [up/down] → [up²/ud/down²] → ...
+
+3️⃣ Calculate option values:
+   • Terminal values: max(S - K, 0) for calls
+   • Backward induction: max(expected value, early exercise)
+```
+
+#### ✅ Advantages
+
+<table>
+<tr>
+<td width="33%">
+
+**🎯 Flexibility**
+- American options
+- Early exercise
+- Dividends support
+
+</td>
+<td width="33%">
+
+**📊 Intuitive**
+- Visual tree structure
+- Clear probability paths
+- Easy to understand
+
+</td>
+<td width="33%">
+
+**⚙️ Configurable**
+- Adjustable steps
+- Accuracy vs speed
+- Default: 100 steps
+
+</td>
+</tr>
+</table>
+
+#### ⚙️ Configuration
+
+| Parameter | Default | Impact |
+|-----------|---------|--------|
+| **Time Steps** | 100 | More steps = ↑ accuracy, ↓ speed |
+| **Optimal** | 50-200 | Balance accuracy & performance |
+
+---
+
+## 📊 Greeks Computation
+
+> *Measuring option price sensitivity to market factors*
+
+<div align="center">
+
+### 🎯 The Five Greeks
+
+| Greek | Symbol | Measures | Formula | Range |
+|-------|--------|----------|---------|-------|
+| **Delta** | Δ | Price sensitivity | ∂V/∂S | Call: [0,1], Put: [-1,0] |
+| **Gamma** | Γ | Delta sensitivity | ∂²V/∂S² | Always positive |
+| **Vega** | ν | Volatility sensitivity | ∂V/∂σ | Always positive |
+| **Theta** | Θ | Time decay | ∂V/∂t | Usually negative |
+| **Rho** | ρ | Rate sensitivity | ∂V/∂r | Call: +, Put: - |
+
+</div>
+
+---
+
+### 📈 Delta (Δ) - Directional Risk
+
 ```
 Δ = ∂V/∂S
 ```
+
+<table>
+<tr>
+<td width="50%">
+
+**📊 Characteristics**
 - **Call Delta:** 0 to 1
 - **Put Delta:** -1 to 0
 - **Use:** Hedge ratio, directional risk
 
-**Example:**
-- Delta = 0.6 means a $1 increase in stock price → ~$0.60 increase in option price
-- To hedge 100 call options (Delta = 0.6): Short 60 shares
+</td>
+<td width="50%">
 
-### Gamma (Γ)
-**Definition:** Rate of change of delta with respect to underlying price
+**💡 Example**
+- Delta = 0.6 → $1 ↑ stock = ~$0.60 ↑ option
+- To hedge 100 calls (Δ=0.6): Short 60 shares
+- ATM options: Δ ≈ 0.5 (calls)
+
+</td>
+</tr>
+</table>
+
+---
+
+### 📊 Gamma (Γ) - Convexity Risk
+
 ```
 Γ = ∂²V/∂S²
 ```
-- **Range:** Always positive for long options
-- **Use:** Delta hedging stability, curvature risk
 
-**Example:**
-- Gamma = 0.05 means if stock moves $1, delta changes by 0.05
-- High gamma → delta changes rapidly → need frequent rehedging
+<table>
+<tr>
+<td width="50%">
 
-### Vega (ν)
-**Definition:** Rate of change of option price with respect to volatility
+**📊 Characteristics**
+- **Range:** Always positive (long)
+- **Use:** Delta stability, curvature
+- **Peak:** ATM options
+
+</td>
+<td width="50%">
+
+**💡 Example**
+- Gamma = 0.05 → $1 move = 0.05 delta change
+- High gamma = rapid delta changes
+- Need frequent rehedging
+
+</td>
+</tr>
+</table>
+
+---
+
+### 🌊 Vega (ν) - Volatility Risk
+
 ```
 ν = ∂V/∂σ
 ```
-- **Range:** Always positive for long options
-- **Use:** Volatility risk exposure
 
-**Example:**
-- Vega = 0.4 means 1% volatility increase → $0.40 option price increase
-- Long options → positive vega (benefit from vol increase)
+<table>
+<tr>
+<td width="50%">
 
-### Theta (Θ)
-**Definition:** Rate of change of option price with respect to time
+**📊 Characteristics**
+- **Range:** Always positive (long)
+- **Use:** Volatility exposure
+- **Peak:** ATM, longer maturity
+
+</td>
+<td width="50%">
+
+**💡 Example**
+- Vega = 0.4 → 1% vol ↑ = $0.40 ↑ option
+- Long options = positive vega
+- Benefit from volatility increases
+
+</td>
+</tr>
+</table>
+
+---
+
+### ⏰ Theta (Θ) - Time Decay
+
 ```
 Θ = ∂V/∂t
 ```
-- **Range:** Typically negative for long options (time decay)
-- **Use:** Time decay risk
 
-**Example:**
-- Theta = -0.05 means option loses $0.05 per day (all else equal)
-- Accelerates as expiration approaches
+<table>
+<tr>
+<td width="50%">
 
-### Rho (ρ)
-**Definition:** Rate of change of option price with respect to interest rate
+**📊 Characteristics**
+- **Range:** Usually negative (long)
+- **Use:** Time decay tracking
+- **Acceleration:** Near expiration
+
+</td>
+<td width="50%">
+
+**💡 Example**
+- Theta = -0.05 → lose $0.05/day
+- Accelerates near expiration
+- Long options lose value over time
+
+</td>
+</tr>
+</table>
+
+---
+
+### 💰 Rho (ρ) - Interest Rate Risk
+
 ```
 ρ = ∂V/∂r
 ```
-- **Call Rho:** Positive (higher rates → higher call values)
-- **Put Rho:** Negative (higher rates → lower put values)
-- **Use:** Interest rate risk (usually minor)
 
-### Portfolio Greeks
+<table>
+<tr>
+<td width="50%">
 
-For a portfolio with multiple positions:
+**📊 Characteristics**
+- **Call Rho:** Positive
+- **Put Rho:** Negative
+- **Use:** Rate risk (minor)
+
+</td>
+<td width="50%">
+
+**💡 Example**
+- Higher rates → higher call values
+- Higher rates → lower put values
+- Usually smallest Greek impact
+
+</td>
+</tr>
+</table>
+
+---
+
+### 📦 Portfolio Greeks
+
 ```python
+# 🔧 Calculate aggregated portfolio Greeks
 simulator = HedgingSimulator()
 portfolio_greeks = simulator.calculate_portfolio_greeks(portfolio)
 
-print(f"Portfolio Delta: {portfolio_greeks['delta']:.2f}")
-print(f"Portfolio Gamma: {portfolio_greeks['gamma']:.4f}")
-print(f"Portfolio Vega:  {portfolio_greeks['vega']:.2f}")
+# 📊 Display results
+print(f"📈 Portfolio Delta: {portfolio_greeks['delta']:.2f}")
+print(f"📊 Portfolio Gamma: {portfolio_greeks['gamma']:.4f}")
+print(f"🌊 Portfolio Vega:  {portfolio_greeks['vega']:.2f}")
+print(f"⏰ Portfolio Theta: {portfolio_greeks['theta']:.2f}")
+print(f"💰 Portfolio Rho:   {portfolio_greeks['rho']:.2f}")
 ```
 
 ---
