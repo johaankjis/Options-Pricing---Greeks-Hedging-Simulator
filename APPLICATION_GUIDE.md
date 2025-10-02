@@ -703,324 +703,653 @@ print(f"💰 Portfolio Rho:   {portfolio_greeks['rho']:.2f}")
 
 ---
 
-## Hedging Strategies
+## 🛡️ Hedging Strategies
 
-### Delta Hedging
+> *Advanced techniques to reduce portfolio risk*
 
-**Objective:** Create a delta-neutral position to eliminate directional risk
+---
 
-**Implementation:**
+### ⚖️ Delta Hedging
+
+> *Eliminate directional risk with delta-neutral positions*
+
+#### 🎯 Objective
+Create a **delta-neutral** position to eliminate directional risk
+
+#### 💻 Implementation
+
 ```python
 simulator = HedgingSimulator()
 
-# Original portfolio with long call options
+# 📊 Original portfolio with long call options
 original_portfolio = Portfolio(positions=[...])
 
-# Apply delta hedge
+# 🛡️ Apply delta hedge
 hedged_portfolio = simulator.delta_hedge(original_portfolio)
 
-# The hedged portfolio now has Delta ≈ 0
+# ✅ The hedged portfolio now has Delta ≈ 0
 ```
 
-**Mechanics:**
-1. Calculate portfolio delta
-2. Add opposite stock position: shares = -portfolio_delta
-3. Result: Delta-neutral portfolio
+#### 🔄 Mechanics
 
-**Benefits:**
-- Protects against small price movements
-- Reduces directional risk
-- Captures time value and volatility changes
+```
+1️⃣ Calculate portfolio delta
+2️⃣ Add opposite stock position: shares = -portfolio_delta
+3️⃣ Result: Delta-neutral portfolio (Δ ≈ 0)
+```
 
-**Limitations:**
-- Requires continuous rebalancing
-- Gamma risk remains (delta changes as price moves)
-- Transaction costs
+<table>
+<tr>
+<td width="50%">
 
-### Gamma Hedging
+#### ✅ Benefits
+- 🎯 Protects against small price moves
+- 📉 Reduces directional risk
+- 💰 Captures time value changes
+- 🌊 Benefits from volatility
 
-**Objective:** Create both delta and gamma-neutral positions
+</td>
+<td width="50%">
 
-**Implementation:**
+#### ⚠️ Limitations
+- 🔄 Requires continuous rebalancing
+- 📊 Gamma risk remains
+- 💸 Transaction costs
+- ⏰ Time-intensive
+
+</td>
+</tr>
+</table>
+
+---
+
+### 🎲 Gamma Hedging
+
+> *Create both delta and gamma-neutral positions*
+
+#### 🎯 Objective
+Achieve **delta & gamma neutrality** for enhanced stability
+
+#### 💻 Implementation
+
 ```python
-# Define hedge option (typically different strike)
+# 📝 Define hedge option (typically different strike)
 hedge_option = OptionParams(
     spot=100, strike=95, volatility=0.25,
     rate=0.05, maturity=0.5, option_type='put'
 )
 
-# Apply gamma hedge
+# 🛡️ Apply gamma hedge
 hedged_portfolio = simulator.gamma_hedge(
     portfolio=original_portfolio,
     hedge_option_params=hedge_option
 )
 
-# Now both Delta ≈ 0 and Gamma ≈ 0
+# ✅ Now both Delta ≈ 0 and Gamma ≈ 0
 ```
 
-**Mechanics:**
-1. Add options to neutralize gamma
-2. Then delta hedge the combined portfolio
-3. Result: Both delta and gamma neutral
+#### 🔄 Mechanics
 
-**Benefits:**
-- More stable than delta-only hedge
-- Less rebalancing needed
-- Better for large moves
-
-**Considerations:**
-- Requires option positions (higher costs)
-- Vega exposure may change
-- More complex to implement
-
-### Monte Carlo Stress Testing
-
-Test hedging effectiveness across thousands of scenarios:
-
-```python
-results = simulator.simulate_hedging_effectiveness(
-    portfolio=portfolio,
-    hedge_strategy='delta',
-    n_scenarios=1000
-)
-
-# Analyze results
-print(f"Unhedged Std Dev: ${results['unhedged_std']:.2f}")
-print(f"Hedged Std Dev:   ${results['hedged_std']:.2f}")
-print(f"Variance Reduction: {results['variance_reduction']:.1f}%")
+```
+1️⃣ Add options to neutralize gamma
+2️⃣ Then delta hedge the combined portfolio
+3️⃣ Result: Both Δ ≈ 0 and Γ ≈ 0
 ```
 
-**Scenarios Include:**
-- Random spot price changes (-20% to +20%)
-- Volatility shocks (-50% to +50%)
-- Time decay (1 day forward)
+<table>
+<tr>
+<td width="50%">
 
-**Success Metric:** ≥ 15% variance reduction
+#### ✅ Benefits
+- 🎯 More stable than delta-only
+- 🔄 Less rebalancing needed
+- 📈 Better for large moves
+- 🛡️ Enhanced protection
+
+</td>
+<td width="50%">
+
+#### ⚠️ Considerations
+- 💸 Higher costs (options needed)
+- 🌊 Vega exposure may change
+- 🔧 More complex to implement
+- 📊 Requires option liquidity
+
+</td>
+</tr>
+</table>
 
 ---
 
-## Interactive Dashboard
+### 🎲 Monte Carlo Stress Testing
 
-The Plotly Dash dashboard provides real-time visualization and analysis:
+> *Test hedging effectiveness across thousands of market scenarios*
 
-### Launching the Dashboard
+#### 💻 Implementation
+
+```python
+# 🧪 Run stress test simulation
+results = simulator.simulate_hedging_effectiveness(
+    portfolio=portfolio,
+    hedge_strategy='delta',  # 'none', 'delta', or 'gamma'
+    n_scenarios=1000         # 1000 market scenarios
+)
+
+# 📊 Analyze results
+print(f"📊 Unhedged Std Dev: ${results['unhedged_std']:.2f}")
+print(f"🛡️ Hedged Std Dev:   ${results['hedged_std']:.2f}")
+print(f"📉 Variance Reduction: {results['variance_reduction']:.1f}%")
+```
+
+#### 🎲 Scenarios Include
+
+<div align="center">
+
+| Scenario | Range | Impact |
+|----------|-------|--------|
+| 📈 **Price Changes** | -20% to +20% | Directional moves |
+| 🌊 **Volatility Shocks** | -50% to +50% | Vol spikes/crashes |
+| ⏰ **Time Decay** | 1 day forward | Theta impact |
+
+**🎯 Success Metric:** ≥ 15% variance reduction
+
+</div>
+
+---
+
+## 🎨 Interactive Dashboard
+
+> *Real-time visualization and analysis with Plotly Dash*
+
+### 🚀 Launching the Dashboard
 
 ```bash
+# 🚀 Start the dashboard server
 python scripts/run_dashboard.py
 ```
 
-Then navigate to: **http://127.0.0.1:8050**
-
-### Dashboard Features
-
-#### 1. Option Parameters Panel
-**Inputs:**
-- Spot Price: Current underlying price
-- Strike Price: Option exercise price
-- Time to Maturity: Years until expiration
-- Volatility: Annual volatility (sigma)
-- Risk-Free Rate: Annual rate
-- Option Type: Call or Put
-- Exercise Style: European or American
-- Pricing Model: Black-Scholes or Binomial Tree
-
-#### 2. Pricing Results Display
-**Outputs:**
-- Option Price (both models for comparison)
-- All Greeks (Delta, Gamma, Vega, Theta, Rho)
-- Time value vs Intrinsic value breakdown
-
-#### 3. Payoff Diagram
-**Visualization:**
-- Profit/Loss vs underlying price at expiration
-- Breakeven points
-- Maximum profit/loss
-- Current spot price indicator
-
-#### 4. Greeks Visualization
-**Charts:**
-- Delta curve across spot prices
-- Gamma curve showing sensitivity
-- Vega profile
-- Time decay (Theta) over time
-
-#### 5. 3D Delta Surface
-**Interactive 3D Plot:**
-- Delta variation with spot price and time
-- Rotating 3D visualization
-- Color gradient for magnitude
-
-#### 6. Hedging Simulation
-**Analysis:**
-- Compare no hedge vs delta hedge vs gamma hedge
-- PnL distribution histograms
-- Variance reduction metrics
-- Expected shortfall (worst-case scenarios)
-
-### Performance Characteristics
-- **Update Latency:** < 1 second for all calculations
-- **Responsiveness:** Instant parameter updates
-- **Visualization:** Smooth, interactive charts
+Then navigate to: **🌐 http://127.0.0.1:8050**
 
 ---
 
-## Performance Optimization
+### 🎛️ Dashboard Features
 
-### Optimization Techniques
+#### 1️⃣ Option Parameters Panel
 
-#### 1. Numba JIT Compilation
-**Impact:** 10-100x speedup for numerical functions
+**📝 Inputs:**
+
+<div align="center">
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| 💵 **Spot Price** | Current underlying price | $100 |
+| 🎯 **Strike Price** | Option exercise price | $105 |
+| ⏰ **Time to Maturity** | Years until expiration | 1.0 year |
+| 📊 **Volatility** | Annual volatility (σ) | 25% |
+| 💰 **Risk-Free Rate** | Annual rate | 5% |
+| 📈 **Option Type** | Call or Put | Call |
+| 🌍 **Exercise Style** | European or American | European |
+| 🔧 **Pricing Model** | Black-Scholes or Binomial | B-S |
+
+</div>
+
+---
+
+#### 2️⃣ Pricing Results Display
+
+**📊 Outputs:**
+
+<table>
+<tr>
+<td width="33%">
+
+**💵 Price**
+- Both model prices
+- Comparison view
+- % difference
+
+</td>
+<td width="33%">
+
+**📊 Greeks**
+- Δ, Γ, ν, Θ, ρ
+- All sensitivities
+- Real-time updates
+
+</td>
+<td width="33%">
+
+**💎 Value Breakdown**
+- Time value
+- Intrinsic value
+- Premium components
+
+</td>
+</tr>
+</table>
+
+---
+
+#### 3️⃣ Payoff Diagram
+
+**📈 Visualization:**
+
+- 📉 Profit/Loss vs underlying price at expiration
+- 🎯 Breakeven points highlighted
+- 📊 Maximum profit/loss markers
+- 📍 Current spot price indicator
+- 🎨 Interactive hover details
+
+---
+
+#### 4️⃣ Greeks Visualization
+
+**📊 Charts:**
+
+<table>
+<tr>
+<td width="50%">
+
+**Delta Curve**
+- 📈 Δ across spot prices
+- 🎯 Spot price sensitivity
+- Color-coded regions
+
+</td>
+<td width="50%">
+
+**Gamma Curve**
+- 📊 Γ showing convexity
+- 🎲 Delta sensitivity
+- Peak visualization
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Vega Profile**
+- 🌊 Volatility sensitivity
+- 📊 Vol impact visualization
+- Peak at ATM
+
+</td>
+<td width="50%">
+
+**Theta Decay**
+- ⏰ Time decay over time
+- 📉 Acceleration near expiry
+- Daily loss visualization
+
+</td>
+</tr>
+</table>
+
+---
+
+#### 5️⃣ 3D Delta Surface
+
+**🗺️ Interactive 3D Plot:**
+
+- 📊 Delta variation with spot & time
+- 🔄 Rotating 3D visualization
+- 🎨 Color gradient for magnitude
+- 🖱️ Interactive controls (zoom, pan, rotate)
+- 💡 Intuitive understanding of Δ behavior
+
+---
+
+#### 6️⃣ Hedging Simulation
+
+**📊 Analysis:**
+
+<div align="center">
+
+| Comparison | Visualization | Metrics |
+|------------|---------------|---------|
+| **No Hedge** | 📊 PnL distribution | Std dev, VaR |
+| **Delta Hedge** | 📊 Improved distribution | Variance reduction |
+| **Gamma Hedge** | 📊 Best distribution | Maximum protection |
+
+</div>
+
+**📈 Features:**
+- PnL distribution histograms
+- Variance reduction metrics (%)
+- Expected shortfall (worst-case)
+- Side-by-side comparison
+
+---
+
+### ⚡ Performance Characteristics
+
+<div align="center">
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| ⚡ **Update Latency** | < 1 second | ✅ |
+| 🎯 **Responsiveness** | Instant | ✅ |
+| 🎨 **Visualization** | Smooth & Interactive | ✅ |
+| 💻 **CPU Usage** | Low | ✅ |
+| 📊 **Chart Rendering** | Real-time | ✅ |
+
+</div>
+
+---
+
+## ⚡ Performance Optimization
+
+> *Achieving 40-90% faster computation through advanced techniques*
+
+---
+
+### 🛠️ Optimization Techniques
+
+#### 1️⃣ Numba JIT Compilation
+
+**💥 Impact:** 10-100x speedup for numerical functions
 
 ```python
 from numba import jit
 
 @jit(nopython=True, cache=True)
 def black_scholes_price(S, K, sigma, r, T, is_call):
-    # Compiled to machine code
-    # Runs at near-C speed
+    # 🚀 Compiled to machine code
+    # ⚡ Runs at near-C speed
     ...
 ```
 
-**Benefits:**
-- Near-native code performance
-- Automatic parallelization
-- Cached compilation (fast subsequent runs)
+<table>
+<tr>
+<td width="33%">
 
-#### 2. Vectorization
-**Impact:** 80-90% faster for array operations
+**🚀 Performance**
+- Near-native code speed
+- Machine code compilation
+- Dramatic speedups
+
+</td>
+<td width="33%">
+
+**🔀 Parallelization**
+- Automatic threading
+- Multi-core utilization
+- No GIL overhead
+
+</td>
+<td width="33%">
+
+**💾 Caching**
+- Cached compilation
+- Fast subsequent runs
+- Persistent cache
+
+</td>
+</tr>
+</table>
+
+---
+
+#### 2️⃣ Vectorization
+
+**💥 Impact:** 80-90% faster for array operations
 
 ```python
-# Instead of looping
+# ❌ Slow: Loop-based approach
 for i in range(len(spot_array)):
     price = calculate_price(spot_array[i])
     
-# Vectorize
+# ✅ Fast: Vectorized approach
 prices = black_scholes_vectorized(spot_array, K, sigma, r, T)
 ```
 
-**Benefits:**
-- SIMD instructions utilized
-- Eliminates Python loop overhead
-- Batch processing efficiency
+<table>
+<tr>
+<td width="33%">
 
-#### 3. Fast Approximations
-**Normal Distribution:**
+**💨 SIMD**
+- Vector instructions
+- Parallel processing
+- Hardware acceleration
+
+</td>
+<td width="33%">
+
+**🚫 No Loops**
+- Eliminates Python loops
+- Reduced overhead
+- Batch efficiency
+
+</td>
+<td width="33%">
+
+**📊 Batch**
+- Process arrays
+- Multiple at once
+- Optimized memory access
+
+</td>
+</tr>
+</table>
+
+---
+
+#### 3️⃣ Fast Approximations
+
+**📐 Normal Distribution:**
+
 ```python
 @jit(nopython=True, cache=True)
 def norm_cdf(x):
-    # Fast tanh-based approximation
+    # ⚡ Fast tanh-based approximation
     return 0.5 * (1.0 + np.tanh(np.sqrt(2/np.pi) * (x + 0.044715 * x**3)))
 ```
 
-**Benefits:**
-- Avoids scipy overhead
-- Maintains < 0.1% accuracy
-- Significant speedup for frequent calls
+<table>
+<tr>
+<td width="33%">
 
-#### 4. Parallel Monte Carlo
+**⚡ Speed**
+- Avoids scipy overhead
+- Pure computation
+- Inline optimization
+
+</td>
+<td width="33%">
+
+**🎯 Accuracy**
+- < 0.1% error
+- Production quality
+- Validated results
+
+</td>
+<td width="33%">
+
+**🔄 Frequency**
+- Called millions of times
+- Cumulative speedup
+- Major impact
+
+</td>
+</tr>
+</table>
+
+---
+
+#### 4️⃣ Parallel Monte Carlo
+
 ```python
 @jit(nopython=True, parallel=True, cache=True)
 def monte_carlo_paths(S0, sigma, r, T, n_paths, n_steps):
-    for i in prange(n_paths):  # Parallel loop
+    for i in prange(n_paths):  # 🔀 Parallel loop
         # Independent path generation
         ...
 ```
 
-**Benefits:**
-- Multi-core utilization
-- Linear scaling with CPU cores
-- No thread management overhead
+<table>
+<tr>
+<td width="33%">
 
-### Performance Benchmarks
+**🔀 Multi-Core**
+- All cores utilized
+- Parallel execution
+- Maximum throughput
 
-Run benchmarks:
+</td>
+<td width="33%">
+
+**📈 Scaling**
+- Linear with cores
+- Predictable performance
+- Efficient distribution
+
+</td>
+<td width="33%">
+
+**🎯 Simple**
+- No thread management
+- Automatic distribution
+- Easy to implement
+
+</td>
+</tr>
+</table>
+
+---
+
+### 📊 Performance Benchmarks
+
+**🧪 Run benchmarks:**
+
 ```bash
 python scripts/benchmark_performance.py
 ```
 
-**Expected Results:**
+#### 📈 Expected Results
 
-| Operation | Baseline | Optimized | Speedup |
-|-----------|----------|-----------|---------|
-| Single Pricing | 100ms | 40ms | 60% |
-| Greeks Calculation | 500ms | 250ms | 50% |
-| Vectorized (1000 prices) | 2000ms | 200ms | 90% |
-| Monte Carlo (10K paths) | 3500ms | 1800ms | 48% |
+<div align="center">
 
-**Hardware:** Results shown for typical modern CPU (4-8 cores)
+| Operation | Baseline | Optimized | Speedup | Status |
+|-----------|----------|-----------|---------|--------|
+| 🎯 **Single Pricing** | 100ms | 40ms | **60%** ↑ | ✅ |
+| 📊 **Greeks Calculation** | 500ms | 250ms | **50%** ↑ | ✅ |
+| 🔢 **Vectorized (1K prices)** | 2000ms | 200ms | **90%** ↑ | ✅ |
+| 🎲 **Monte Carlo (10K paths)** | 3500ms | 1800ms | **48%** ↑ | ✅ |
+
+</div>
+
+**💻 Hardware:** Results shown for typical modern CPU (4-8 cores)
 
 ---
 
-## Getting Started
+## 💻 Getting Started
 
-### Installation
+> *Get up and running in minutes*
 
-#### Prerequisites
-- Python 3.8 or higher
-- pip package manager
+---
 
-#### Install Dependencies
+### 📦 Installation
+
+#### ✅ Prerequisites
+
+<div align="center">
+
+| Requirement | Version | Status |
+|-------------|---------|--------|
+| 🐍 **Python** | 3.8 or higher | Required |
+| 📦 **pip** | Latest | Required |
+| 💻 **OS** | Windows/Mac/Linux | Any |
+
+</div>
+
+#### 🚀 Install Dependencies
+
 ```bash
+# 📥 Install all required packages
 pip install -r requirements.txt
 ```
 
-**Required Packages:**
-- numpy >= 1.24.0
-- scipy >= 1.10.0
-- plotly >= 5.14.0
-- dash >= 2.9.0
-- pandas >= 2.0.0
-- numba >= 0.57.0
+**📚 Required Packages:**
 
-### Quick Start Examples
+<div align="center">
 
-#### Example 1: Price a Single Option
+| Package | Version | Purpose |
+|---------|---------|---------|
+| **numpy** | >= 1.24.0 | Numerical computing |
+| **scipy** | >= 1.10.0 | Scientific functions |
+| **plotly** | >= 5.14.0 | Interactive charts |
+| **dash** | >= 2.9.0 | Web dashboard |
+| **pandas** | >= 2.0.0 | Data manipulation |
+| **numba** | >= 0.57.0 | JIT compilation |
+
+</div>
+
+---
+
+### 🎯 Quick Start Examples
+
+#### Example 1️⃣: Price a Single Option
+
 ```python
 from pricing import OptionParams, OptionsPricingEngine
 
+# 🔧 Create pricing engine
 engine = OptionsPricingEngine()
 
+# 📝 Define call option
 call = OptionParams(
-    spot=100, strike=105, volatility=0.20,
-    rate=0.03, maturity=0.5, option_type='call'
+    spot=100,           # 💵 Current price
+    strike=105,         # 🎯 Strike price
+    volatility=0.20,    # 📊 20% volatility
+    rate=0.03,          # 💰 3% risk-free rate
+    maturity=0.5,       # ⏰ 6 months
+    option_type='call'  # 📈 Call option
 )
 
+# 💰 Calculate price and Greeks
 price = engine.price(call)
 greeks = engine.greeks(call)
 
-print(f"Call Price: ${price:.2f}")
-print(f"Delta: {greeks['delta']:.4f}")
+print(f"💵 Call Price: ${price:.2f}")
+print(f"📊 Delta: {greeks['delta']:.4f}")
 ```
 
-#### Example 2: Compare American vs European
+---
+
+#### Example 2️⃣: Compare American vs European
+
 ```python
-# European put
+# 🌍 European put
 euro_put = OptionParams(
     spot=100, strike=100, volatility=0.25,
     rate=0.05, maturity=1.0, 
     option_type='put', style='european'
 )
 
-# American put (same parameters)
+# 🇺🇸 American put (same parameters)
 amer_put = OptionParams(
     spot=100, strike=100, volatility=0.25,
     rate=0.05, maturity=1.0, 
     option_type='put', style='american'
 )
 
+# 💵 Price both options
 euro_price = engine.price(euro_put)
 amer_price = engine.price(amer_put)
 
-print(f"European Put: ${euro_price:.2f}")
-print(f"American Put: ${amer_price:.2f}")
-print(f"Early Exercise Premium: ${amer_price - euro_price:.2f}")
+print(f"🌍 European Put: ${euro_price:.2f}")
+print(f"🇺🇸 American Put: ${amer_price:.2f}")
+print(f"💎 Early Exercise Premium: ${amer_price - euro_price:.2f}")
 ```
 
-#### Example 3: Build and Hedge a Portfolio
+---
+
+#### Example 3️⃣: Build and Hedge a Portfolio
+
 ```python
 from hedging import Portfolio, Position, HedgingSimulator
 
-# Create portfolio with long calls
+# 📊 Create portfolio with long calls
 portfolio = Portfolio(positions=[
     Position(
         instrument_type='option',
@@ -1032,7 +1361,7 @@ portfolio = Portfolio(positions=[
     )
 ])
 
-# Simulate hedging
+# 🛡️ Simulate hedging strategies
 simulator = HedgingSimulator()
 
 results = simulator.compare_strategies(
@@ -1040,270 +1369,458 @@ results = simulator.compare_strategies(
     n_scenarios=1000
 )
 
-print(f"Unhedged Variance: ${results['no_hedge']['pnl_std']:.2f}")
-print(f"Delta Hedged Variance: ${results['delta_hedge']['pnl_std']:.2f}")
-print(f"Variance Reduction: {results['delta_hedge']['variance_reduction']:.1f}%")
-```
-
-### Docker Deployment
-
-#### Build Image
-```bash
-docker build -t options-simulator .
-```
-
-#### Run Container
-```bash
-docker run -p 8050:8050 options-simulator
-```
-
-Access dashboard at: http://localhost:8050
-
-### Running Tests
-
-#### Validate Pricing Accuracy
-```bash
-python scripts/test_pricing.py
-```
-
-#### Test Hedging Simulation
-```bash
-python scripts/test_hedging.py
-```
-
-#### Performance Benchmarks
-```bash
-python scripts/benchmark_performance.py
+# 📊 Display results
+print(f"📊 Unhedged Variance: ${results['no_hedge']['pnl_std']:.2f}")
+print(f"🛡️ Delta Hedged Variance: ${results['delta_hedge']['pnl_std']:.2f}")
+print(f"📉 Variance Reduction: {results['delta_hedge']['variance_reduction']:.1f}%")
 ```
 
 ---
 
-## API Reference
+### 🐳 Docker Deployment
 
-### OptionParams Class
+#### 🏗️ Build Image
+
+```bash
+# 🔨 Build Docker image
+docker build -t options-simulator .
+```
+
+#### 🚀 Run Container
+
+```bash
+# 🚀 Start container
+docker run -p 8050:8050 options-simulator
+```
+
+**🌐 Access dashboard at:** http://localhost:8050
+
+---
+
+### 🧪 Running Tests
+
+<table>
+<tr>
+<td width="50%">
+
+#### ✅ Validate Pricing
+
+```bash
+# 🎯 Test pricing accuracy
+python scripts/test_pricing.py
+```
+
+</td>
+<td width="50%">
+
+#### 🛡️ Test Hedging
+
+```bash
+# 🛡️ Test hedging strategies
+python scripts/test_hedging.py
+```
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### 📊 Benchmarks
+
+```bash
+# ⚡ Performance benchmarks
+python scripts/benchmark_performance.py
+```
+
+</td>
+<td width="50%">
+
+#### 🎨 Launch Dashboard
+
+```bash
+# 🚀 Start dashboard
+python scripts/run_dashboard.py
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📚 API Reference
+
+> *Complete API documentation for developers*
+
+---
+
+### 📦 OptionParams Class
 
 ```python
 @dataclass
 class OptionParams:
-    spot: float          # Current underlying price
-    strike: float        # Strike/exercise price
-    volatility: float    # Annualized volatility (σ)
-    rate: float          # Risk-free rate (annual)
-    maturity: float      # Time to maturity (years)
+    spot: float          # 💵 Current underlying price
+    strike: float        # 🎯 Strike/exercise price
+    volatility: float    # 📊 Annualized volatility (σ)
+    rate: float          # 💰 Risk-free rate (annual)
+    maturity: float      # ⏰ Time to maturity (years)
     option_type: Literal['call', 'put']
     style: Literal['european', 'american'] = 'european'
 ```
 
-### OptionsPricingEngine
+<div align="center">
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `spot` | float | Current underlying price | 100.0 |
+| `strike` | float | Strike/exercise price | 105.0 |
+| `volatility` | float | Annual volatility (σ) | 0.25 |
+| `rate` | float | Risk-free rate (annual) | 0.05 |
+| `maturity` | float | Time to maturity (years) | 1.0 |
+| `option_type` | str | 'call' or 'put' | 'call' |
+| `style` | str | 'european' or 'american' | 'european' |
+
+</div>
+
+---
+
+### 💰 OptionsPricingEngine
 
 ```python
 class OptionsPricingEngine:
     def __init__(self, binomial_steps: int = 100):
-        """Initialize pricing engine"""
+        """🔧 Initialize pricing engine
+        
+        Args:
+            binomial_steps: Number of steps for binomial tree (default: 100)
+        """
         
     def price(self, params: OptionParams) -> float:
-        """Calculate option price"""
+        """💵 Calculate option price
+        
+        Args:
+            params: Option parameters
+            
+        Returns:
+            Option price (float)
+        """
         
     def greeks(self, params: OptionParams) -> Dict[str, float]:
-        """Calculate all Greeks
-        Returns: {'delta', 'gamma', 'vega', 'theta', 'rho'}
+        """📊 Calculate all Greeks
+        
+        Args:
+            params: Option parameters
+            
+        Returns:
+            Dict: {'delta', 'gamma', 'vega', 'theta', 'rho'}
         """
 ```
 
-### OptimizedPricingEngine
+---
+
+### ⚡ OptimizedPricingEngine
 
 ```python
 class OptimizedPricingEngine:
     def __init__(self, binomial_steps: int = 100):
-        """Initialize optimized engine with JIT compilation"""
+        """🚀 Initialize optimized engine with JIT compilation
+        
+        Args:
+            binomial_steps: Number of steps for binomial tree
+        """
         
     def price(self, params: OptionParams) -> float:
-        """Price option (optimized)"""
+        """💵 Price option (optimized)
+        
+        Returns: Option price
+        """
         
     def greeks(self, params: OptionParams) -> Dict[str, float]:
-        """Calculate Greeks (optimized)"""
+        """📊 Calculate Greeks (optimized)
+        
+        Returns: All Greeks
+        """
         
     def price_multiple(self, spot_array: np.ndarray, 
                       params: OptionParams) -> np.ndarray:
-        """Vectorized pricing for multiple spot prices"""
+        """🔢 Vectorized pricing for multiple spot prices
+        
+        Args:
+            spot_array: Array of spot prices
+            params: Option parameters
+            
+        Returns:
+            Array of option prices
+        """
         
     def simulate_paths(self, S0: float, sigma: float, r: float,
                       T: float, n_paths: int, n_steps: int) -> np.ndarray:
-        """Monte Carlo price path simulation"""
+        """🎲 Monte Carlo price path simulation
+        
+        Args:
+            S0: Initial price
+            sigma: Volatility
+            r: Risk-free rate
+            T: Time horizon
+            n_paths: Number of paths
+            n_steps: Steps per path
+            
+        Returns:
+            Array of shape (n_paths, n_steps+1)
+        """
 ```
 
-### HedgingSimulator
+---
+
+### 🛡️ HedgingSimulator
 
 ```python
 class HedgingSimulator:
     def __init__(self):
-        """Initialize hedging simulator"""
+        """🔧 Initialize hedging simulator"""
         
     def delta_hedge(self, portfolio: Portfolio) -> Portfolio:
-        """Create delta-neutral hedge"""
+        """⚖️ Create delta-neutral hedge
+        
+        Args:
+            portfolio: Original portfolio
+            
+        Returns:
+            Hedged portfolio (Delta ≈ 0)
+        """
         
     def gamma_hedge(self, portfolio: Portfolio, 
                    hedge_option_params: OptionParams) -> Portfolio:
-        """Create delta and gamma-neutral hedge"""
+        """🎲 Create delta and gamma-neutral hedge
+        
+        Args:
+            portfolio: Original portfolio
+            hedge_option_params: Hedge option parameters
+            
+        Returns:
+            Hedged portfolio (Δ ≈ 0, Γ ≈ 0)
+        """
         
     def calculate_portfolio_greeks(self, portfolio: Portfolio) -> Dict:
-        """Calculate aggregated portfolio Greeks"""
+        """📊 Calculate aggregated portfolio Greeks
+        
+        Args:
+            portfolio: Portfolio to analyze
+            
+        Returns:
+            Dict: Portfolio Greeks
+        """
         
     def simulate_hedging_effectiveness(
         self, portfolio: Portfolio,
         hedge_strategy: Literal['none', 'delta', 'gamma'],
         n_scenarios: int = 1000
     ) -> Dict:
-        """Simulate hedging across market scenarios"""
+        """🧪 Simulate hedging across market scenarios
+        
+        Args:
+            portfolio: Portfolio to test
+            hedge_strategy: Hedging approach
+            n_scenarios: Number of scenarios
+            
+        Returns:
+            Dict: Simulation results with metrics
+        """
         
     def compare_strategies(self, portfolio: Portfolio,
                           n_scenarios: int = 1000,
                           hedge_option_params: OptionParams = None) -> Dict:
-        """Compare all hedging strategies"""
+        """📊 Compare all hedging strategies
+        
+        Args:
+            portfolio: Portfolio to analyze
+            n_scenarios: Number of scenarios
+            hedge_option_params: Optional hedge option
+            
+        Returns:
+            Dict: Comparison results for all strategies
+        """
 ```
 
 ---
 
-## Use Cases
+## 🎯 Use Cases
 
-### Use Case 1: Option Pricing for Trading
-**Scenario:** Determine fair value of an option before trading
+> *Real-world applications and practical examples*
+
+---
+
+### 1️⃣ Option Pricing for Trading
+
+**📊 Scenario:** Determine fair value of an option before trading
 
 ```python
 from pricing import OptionParams, OptionsPricingEngine
 
+# 🔧 Initialize engine
 engine = OptionsPricingEngine()
 
-# Market data
+# 📝 Market data (e.g., AAPL call option)
 market_call = OptionParams(
-    spot=150.25,      # Current AAPL price
-    strike=155,       # Strike price
-    volatility=0.30,  # Implied volatility
-    rate=0.045,       # Current risk-free rate
-    maturity=45/365,  # 45 days to expiration
+    spot=150.25,      # 💵 Current AAPL price
+    strike=155,       # 🎯 Strike price
+    volatility=0.30,  # 📊 30% implied volatility
+    rate=0.045,       # 💰 4.5% risk-free rate
+    maturity=45/365,  # ⏰ 45 days to expiration
     option_type='call'
 )
 
+# 💵 Calculate fair value
 fair_value = engine.price(market_call)
 greeks = engine.greeks(market_call)
 
-print(f"Fair Value: ${fair_value:.2f}")
-print(f"Delta: {greeks['delta']:.3f}")
+print(f"💵 Fair Value: ${fair_value:.2f}")
+print(f"📊 Delta: {greeks['delta']:.3f}")
 
-# Decision: If market price < fair value → potential buy
+# 💡 Decision: If market price < fair value → potential buy opportunity
 ```
 
-### Use Case 2: Portfolio Risk Management
-**Scenario:** Manage delta exposure of an options portfolio
+**💡 Use case:** Compare theoretical value to market price for trading decisions
+
+---
+
+### 2️⃣ Portfolio Risk Management
+
+**🛡️ Scenario:** Manage delta exposure of an options portfolio
 
 ```python
 from hedging import Portfolio, Position, HedgingSimulator
 
-# Build portfolio
+# 📦 Build portfolio
 portfolio = Portfolio(positions=[
-    Position(instrument_type='option', quantity=50, 
+    Position(instrument_type='option', quantity=50,  # 📈 50 long calls
              params=call_option_1),
-    Position(instrument_type='option', quantity=-30, 
+    Position(instrument_type='option', quantity=-30, # 📉 30 short puts
              params=put_option_1),
-    Position(instrument_type='stock', quantity=100)
+    Position(instrument_type='stock', quantity=100)  # 💰 100 shares
 ])
 
+# 🔧 Initialize simulator
 simulator = HedgingSimulator()
 
-# Check current exposure
+# 📊 Check current exposure
 greeks = simulator.calculate_portfolio_greeks(portfolio)
-print(f"Portfolio Delta: {greeks['delta']:.2f}")
-print(f"Portfolio Gamma: {greeks['gamma']:.4f}")
+print(f"📊 Portfolio Delta: {greeks['delta']:.2f}")
+print(f"📊 Portfolio Gamma: {greeks['gamma']:.4f}")
 
-# If |delta| > threshold, hedge it
+# 🛡️ If |delta| > threshold, hedge it
 if abs(greeks['delta']) > 50:
     hedged = simulator.delta_hedge(portfolio)
-    print("Portfolio hedged")
+    print("✅ Portfolio hedged successfully!")
 ```
 
-### Use Case 3: Backtesting Hedging Strategies
-**Scenario:** Evaluate effectiveness of different hedging approaches
+**💡 Use case:** Monitor and manage portfolio Greeks for risk control
+
+---
+
+### 3️⃣ Backtesting Hedging Strategies
+
+**📊 Scenario:** Evaluate effectiveness of different hedging approaches
 
 ```python
 simulator = HedgingSimulator()
 
-# Test portfolio under stressed conditions
+# 🧪 Test portfolio under stressed conditions
 results = simulator.compare_strategies(
     portfolio=portfolio,
-    n_scenarios=5000,  # More scenarios for robust testing
+    n_scenarios=5000,  # 🎲 5000 scenarios for robust testing
     hedge_option_params=hedge_option
 )
 
-# Analyze results
+# 📊 Analyze results
 for strategy in ['no_hedge', 'delta_hedge', 'gamma_hedge']:
     stats = results[strategy]
-    print(f"\n{strategy.upper()}:")
-    print(f"  Mean PnL: ${stats['pnl_mean']:.2f}")
-    print(f"  Std Dev: ${stats['pnl_std']:.2f}")
-    print(f"  Max Loss: ${stats['max_loss']:.2f}")
-    print(f"  Sharpe Ratio: {stats['pnl_mean']/stats['pnl_std']:.2f}")
+    print(f"\n{'='*50}")
+    print(f"📊 {strategy.upper()}:")
+    print(f"  💵 Mean PnL: ${stats['pnl_mean']:.2f}")
+    print(f"  📊 Std Dev: ${stats['pnl_std']:.2f}")
+    print(f"  ⚠️  Max Loss: ${stats['max_loss']:.2f}")
+    print(f"  📈 Sharpe Ratio: {stats['pnl_mean']/stats['pnl_std']:.2f}")
 ```
 
-### Use Case 4: Education & Learning
-**Scenario:** Interactive learning about option Greeks
+**💡 Use case:** Compare hedging strategies to optimize risk-return profile
+
+---
+
+### 4️⃣ Education & Learning
+
+**🎓 Scenario:** Interactive learning about option Greeks
 
 ```bash
-# Launch the dashboard
+# 🚀 Launch the dashboard
 python scripts/run_dashboard.py
 ```
 
-Then in browser:
-1. Adjust spot price slider → observe Delta changes
-2. Change time to maturity → see Theta effect
-3. Modify volatility → watch Vega impact
-4. Switch between call/put → compare Greeks
-5. View 3D Delta surface → understand behavior
+**📚 Learning path in browser:**
 
-### Use Case 5: Performance-Critical Applications
-**Scenario:** Price thousands of options for real-time risk systems
+1. 📊 Adjust spot price slider → observe **Delta** changes
+2. ⏰ Change time to maturity → see **Theta** effect  
+3. 🌊 Modify volatility → watch **Vega** impact
+4. 🔄 Switch between call/put → compare Greeks
+5. 🗺️ View 3D Delta surface → understand behavior
+
+**💡 Use case:** Hands-on learning for students and professionals
+
+---
+
+### 5️⃣ Performance-Critical Applications
+
+**⚡ Scenario:** Price thousands of options for real-time risk systems
 
 ```python
 from pricing_optimized import OptimizedPricingEngine
 import numpy as np
+import time
 
+# 🚀 Initialize optimized engine
 engine = OptimizedPricingEngine()
 
-# Generate spot price grid
+# 📊 Generate spot price grid (10,000 prices!)
 spots = np.linspace(80, 120, 10000)
 
-# Base option parameters
+# 📝 Base option parameters
 params = OptionParams(
     spot=100, strike=100, volatility=0.25,
     rate=0.05, maturity=1.0, option_type='call'
 )
 
-# Vectorized pricing (very fast)
-import time
+# ⚡ Vectorized pricing (blazingly fast!)
 start = time.time()
 prices = engine.price_multiple(spots, params)
 elapsed = time.time() - start
 
-print(f"Priced {len(spots)} options in {elapsed:.3f}s")
-print(f"Rate: {len(spots)/elapsed:.0f} prices/second")
+print(f"✅ Priced {len(spots):,} options in {elapsed:.3f}s")
+print(f"🚀 Rate: {len(spots)/elapsed:,.0f} prices/second")
 ```
 
-### Use Case 6: Stress Testing
-**Scenario:** Test portfolio under extreme market conditions
+**💡 Use case:** Real-time risk systems and high-frequency applications
+
+---
+
+### 6️⃣ Stress Testing
+
+**⚠️ Scenario:** Test portfolio under extreme market conditions
 
 ```python
 from hedging import MarketScenario
+import numpy as np
 
-# Generate extreme scenarios
+# 🎲 Generate extreme scenarios
 extreme_scenarios = MarketScenario.generate_scenarios(
     base_spot=100,
     base_vol=0.25,
     n_scenarios=1000,
-    spot_shock_range=(-0.3, 0.3),    # ±30% moves
+    spot_shock_range=(-0.3, 0.3),    # ±30% price moves
     vol_shock_range=(-0.7, 1.0),      # Volatility spikes
     time_step=5/252                    # 5 trading days
 )
 
-# Test portfolio performance
+# 🧪 Test portfolio performance
 pnls = []
 for scenario in extreme_scenarios:
     value = simulator.calculate_portfolio_value(
@@ -1314,43 +1831,119 @@ for scenario in extreme_scenarios:
     )
     pnls.append(value)
 
-# Risk metrics
-var_95 = np.percentile(pnls, 5)  # Value at Risk
-cvar_95 = np.mean([p for p in pnls if p < var_95])  # CVaR
+# 📊 Calculate risk metrics
+var_95 = np.percentile(pnls, 5)  # 📉 Value at Risk (95%)
+cvar_95 = np.mean([p for p in pnls if p < var_95])  # 📉 Conditional VaR
 
-print(f"95% VaR: ${var_95:.2f}")
-print(f"95% CVaR: ${cvar_95:.2f}")
+print(f"⚠️  95% VaR: ${var_95:.2f}")
+print(f"⚠️  95% CVaR: ${cvar_95:.2f}")
 ```
 
----
-
-## Conclusion
-
-The Options Pricing & Hedging Simulator provides a comprehensive toolkit for options analysis, from basic pricing to sophisticated hedging strategies. Its combination of accuracy, performance, and usability makes it suitable for both educational and professional applications.
-
-### Key Takeaways
-
-1. **Accurate**: Validated against academic benchmarks (≤ 0.5% error)
-2. **Fast**: Optimized for real-time applications (< 1s updates)
-3. **Comprehensive**: Covers pricing, Greeks, and hedging
-4. **Interactive**: Professional dashboard for visualization
-5. **Flexible**: Both baseline and optimized engines available
-6. **Educational**: Clear code structure for learning
-
-### Next Steps
-
-- Explore the interactive dashboard
-- Run validation and benchmark scripts
-- Experiment with different option strategies
-- Integrate into your own applications
-- Contribute enhancements via GitHub
-
-### Resources
-
-- **Repository**: github.com/johaankjis/Options-Pricing---Greeks-Hedging-Simulator
-- **Documentation**: README.md (quick start)
-- **API Reference**: This guide (comprehensive)
+**💡 Use case:** Stress testing and tail risk analysis
 
 ---
 
-*For questions, issues, or contributions, please visit the GitHub repository.*
+## 🎉 Conclusion
+
+> *A comprehensive toolkit for modern quantitative finance*
+
+The **Options Pricing & Hedging Simulator** provides a complete solution for options analysis, from basic pricing to sophisticated hedging strategies. Its combination of accuracy, performance, and usability makes it suitable for both educational and professional applications.
+
+---
+
+### 🎯 Key Takeaways
+
+<div align="center">
+
+| Feature | Description | Status |
+|---------|-------------|--------|
+| 🎯 **Accurate** | Validated against academic benchmarks (≤ 0.5% error) | ✅ |
+| ⚡ **Fast** | Optimized for real-time applications (< 1s updates) | ✅ |
+| 📚 **Comprehensive** | Covers pricing, Greeks, and hedging | ✅ |
+| 🎨 **Interactive** | Professional dashboard for visualization | ✅ |
+| 🔧 **Flexible** | Both baseline and optimized engines available | ✅ |
+| 🎓 **Educational** | Clear code structure for learning | ✅ |
+
+</div>
+
+---
+
+### 🚀 Next Steps
+
+<table>
+<tr>
+<td width="50%">
+
+#### 🎨 Explore
+- Launch the interactive dashboard
+- Try different option parameters
+- Visualize Greeks behavior
+- Experiment with 3D surfaces
+
+</td>
+<td width="50%">
+
+#### 🧪 Validate
+- Run validation scripts
+- Check pricing accuracy
+- Benchmark performance
+- Test hedging strategies
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### 🔬 Experiment
+- Try different strategies
+- Build custom portfolios
+- Stress test positions
+- Analyze risk metrics
+
+</td>
+<td width="50%">
+
+#### 🤝 Contribute
+- Integrate into your apps
+- Add new features
+- Share improvements
+- Join the community
+
+</td>
+</tr>
+</table>
+
+---
+
+### 📚 Resources
+
+<div align="center">
+
+| Resource | Link | Description |
+|----------|------|-------------|
+| 📦 **Repository** | [GitHub](https://github.com/johaankjis/Options-Pricing---Greeks-Hedging-Simulator) | Source code & issues |
+| 📖 **Quick Start** | [README.md](README.md) | Installation & basics |
+| 📚 **Full Guide** | This document | Comprehensive API reference |
+| 🎓 **Examples** | [Use Cases](#use-cases) | Practical examples |
+
+</div>
+
+---
+
+<div align="center">
+
+### 🌟 Thank You for Using Our Simulator! 🌟
+
+*Built with ❤️ for the quantitative finance community*
+
+[![GitHub stars](https://img.shields.io/github/stars/johaankjis/Options-Pricing---Greeks-Hedging-Simulator?style=social)](https://github.com/johaankjis/Options-Pricing---Greeks-Hedging-Simulator)
+
+**Questions? Issues? Contributions?**
+
+[Report Bug](https://github.com/johaankjis/Options-Pricing---Greeks-Hedging-Simulator/issues) • [Request Feature](https://github.com/johaankjis/Options-Pricing---Greeks-Hedging-Simulator/issues) • [Discuss](https://github.com/johaankjis/Options-Pricing---Greeks-Hedging-Simulator/discussions)
+
+---
+
+*Happy trading and hedging! 📈🛡️💰*
+
+</div>
